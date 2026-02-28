@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Web Metronome
+
+[![CI](https://github.com/pierrehanne/web-metronome/actions/workflows/ci.yml/badge.svg)](https://github.com/pierrehanne/web-metronome/actions/workflows/ci.yml)
+
+A modern, precise online metronome built with the Web Audio API. Designed for musicians who need accurate tempo control for practice and performance.
+
+## Features
+
+- **Precise timing** — Web Audio API scheduler with lookahead pattern for sample-accurate clicks
+- **BPM range 20–300** with Italian tempo markings (Grave through Prestissimo)
+- **Tap tempo** — tap to detect BPM automatically
+- **Time signatures** — 2/4, 3/4, 4/4, 5/4, 6/8, 7/8, 3/8, 9/8, 12/8
+- **Accent first beat** with distinct frequency and volume
+- **Volume control** with mute toggle
+- **Visual beat indicator** — animated circular display with pulse and ring effects
+- **Keyboard shortcuts** — full control without touching the mouse
+- **Responsive** — works on mobile, tablet, and desktop
+
+### Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| `Space` | Play / Stop |
+| `T` | Tap tempo |
+| `↑` | Increase BPM by 1 |
+| `↓` | Decrease BPM by 1 |
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) 16 — App Router
+- [React](https://react.dev/) 19
+- [TypeScript](https://www.typescriptlang.org/) 5
+- [Tailwind CSS](https://tailwindcss.com/) 4
+- [shadcn/ui](https://ui.shadcn.com/) — component primitives
+- [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/) — unit and component tests
+- [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) — precise audio scheduling
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20 or later
+- npm 10 or later
+
+### Installation
+
+```bash
+git clone https://github.com/pierrehanne/web-metronome.git
+cd web-metronome
+npm install
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Run all tests
+npm test
 
-## Learn More
+# Run tests in watch mode
+npm run test:watch
 
-To learn more about Next.js, take a look at the following resources:
+# Run tests with coverage report
+npm run test:coverage
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Test Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+  lib/__tests__/utils.test.ts              # cn() utility tests
+  hooks/__tests__/use-metronome.test.ts    # Metronome engine logic (BPM, timing, playback)
+  components/__tests__/metronome.test.tsx   # UI rendering and interaction tests
+```
 
-## Deploy on Vercel
+Tests cover:
+- BPM clamping, rounding, and boundary values
+- Time signature and volume state management
+- Tap tempo BPM calculation and filtering
+- Playback start/stop/toggle lifecycle
+- Component rendering, keyboard shortcuts, and user interactions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is configured for [Vercel](https://vercel.com/):
+
+1. Push to `main` — Vercel auto-deploys via Git integration
+2. Pull requests get preview deployments automatically
+
+CI runs lint, type checking, tests, and build on every push and PR via GitHub Actions.
+
+## Project Structure
+
+```
+src/
+  app/                  # Next.js App Router pages and layout
+  components/
+    metronome.tsx       # Main metronome UI component
+    ui/                 # shadcn/ui primitives (Button, Slider, Select, Tooltip)
+  hooks/
+    use-metronome.ts    # Web Audio API metronome engine hook
+  lib/
+    utils.ts            # Tailwind class merge utility
+```
+
+## License
+
+MIT

@@ -63,13 +63,20 @@ export function Metronome() {
     state;
 
   const [bpmInput, setBpmInput] = useState(String(bpm));
+  const [ringKey, setRingKey] = useState(0);
   const bpmInputRef = useRef<HTMLInputElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
 
   // Sync bpmInput with bpm from external changes (slider, tap)
   useEffect(() => {
     setBpmInput(String(bpm));
   }, [bpm]);
+
+  // Increment ring key on each beat to retrigger animation
+  useEffect(() => {
+    if (currentBeat >= 0) {
+      setRingKey((k) => k + 1);
+    }
+  }, [currentBeat]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -167,8 +174,7 @@ export function Metronome() {
         {/* Expanding ring animation on beat */}
         {currentBeat >= 0 && (
           <div
-            ref={ringRef}
-            key={`ring-${currentBeat}-${Date.now()}`}
+            key={`ring-${ringKey}`}
             className="absolute inset-6 sm:inset-8 rounded-full border-2 border-amber animate-ring-expand"
           />
         )}
