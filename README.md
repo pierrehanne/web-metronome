@@ -1,6 +1,7 @@
 # Web Metronome
 
 [![CI](https://github.com/pierrehanne/web-metronome/actions/workflows/ci.yml/badge.svg)](https://github.com/pierrehanne/web-metronome/actions/workflows/ci.yml)
+[![Deploy](https://github.com/pierrehanne/web-metronome/actions/workflows/deploy.yml/badge.svg)](https://github.com/pierrehanne/web-metronome/actions/workflows/deploy.yml)
 
 A modern, precise online metronome built with the Web Audio API. Designed for musicians who need accurate tempo control for practice and performance.
 
@@ -18,12 +19,12 @@ A modern, precise online metronome built with the Web Audio API. Designed for mu
 
 ### Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `Space` | Play / Stop |
-| `T` | Tap tempo |
-| `↑` | Increase BPM by 1 |
-| `↓` | Decrease BPM by 1 |
+| Key     | Action            |
+| ------- | ----------------- |
+| `Space` | Play / Stop       |
+| `T`     | Tap tempo         |
+| `↑`     | Increase BPM by 1 |
+| `↓`     | Decrease BPM by 1 |
 
 ## Tech Stack
 
@@ -33,6 +34,7 @@ A modern, precise online metronome built with the Web Audio API. Designed for mu
 - [Tailwind CSS](https://tailwindcss.com/) 4
 - [shadcn/ui](https://ui.shadcn.com/) — component primitives
 - [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/) — unit and component tests
+- [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) — pre-commit validation
 - [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) — precise audio scheduling
 
 ## Getting Started
@@ -81,20 +83,45 @@ src/
 ```
 
 Tests cover:
+
 - BPM clamping, rounding, and boundary values
 - Time signature and volume state management
 - Tap tempo BPM calculation and filtering
 - Playback start/stop/toggle lifecycle
 - Component rendering, keyboard shortcuts, and user interactions
 
+## Git Hooks
+
+Pre-commit hooks run automatically via [Husky](https://typicode.github.io/husky/) to validate code before each commit:
+
+1. **lint-staged** — ESLint on staged `.ts`/`.tsx` files, Prettier on staged files
+2. **Type check** — `tsc --noEmit`
+3. **Tests** — full test suite
+
+This ensures no broken code gets committed.
+
 ## Deployment
 
-This project is configured for [Vercel](https://vercel.com/):
+This project deploys to [Vercel](https://vercel.com/) automatically via GitHub Actions on every push to `main`.
 
-1. Push to `main` — Vercel auto-deploys via Git integration
-2. Pull requests get preview deployments automatically
+### Setup Vercel Deployment
 
-CI runs lint, type checking, tests, and build on every push and PR via GitHub Actions.
+1. Install the [Vercel CLI](https://vercel.com/docs/cli) and link your project:
+   ```bash
+   npm i -g vercel
+   vercel link
+   ```
+2. Get your tokens and IDs:
+   - **`VERCEL_TOKEN`** — create at [vercel.com/account/tokens](https://vercel.com/account/tokens)
+   - **`VERCEL_ORG_ID`** and **`VERCEL_PROJECT_ID`** — found in `.vercel/project.json` after linking
+3. Add these as [GitHub repository secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions):
+   - `VERCEL_TOKEN`
+   - `VERCEL_ORG_ID`
+   - `VERCEL_PROJECT_ID`
+
+Once configured, every push to `main` triggers: lint → type check → test → build → deploy.
+
+CI also runs on pull requests (without deploying) via the separate CI workflow.
 
 ## Project Structure
 
