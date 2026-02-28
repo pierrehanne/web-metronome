@@ -136,7 +136,3 @@ src/
   lib/
     utils.ts            # Tailwind class merge utility
 ```
-
-## License
-
-MIT
